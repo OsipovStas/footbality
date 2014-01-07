@@ -1,0 +1,21 @@
+@(tasks: List[Task])(implicit lang: Lang)
+
+@main("Tasks") {
+<thead>
+<tr>
+    <th>Team</th>
+    <th>Result</th>
+    <th>Since</th>
+</tr>
+</thead>
+<tbody>
+@for(t <- tasks) {
+<tr>
+    <td>@t.team</td>
+    <td>@(t.result map {case -1 => "L"; case 0 => "D"; case 1 => "W"} getOrElse(""))</td>
+    <td>@t.since.getOrElse(null)</td>
+</tr>
+}
+</tbody>
+
+}
