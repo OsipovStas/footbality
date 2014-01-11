@@ -1,0 +1,21 @@
+@(methods: List[RawMethod])(implicit lang: Lang)
+
+@main("Matches") {
+<thead>
+<tr>
+    <th>Method</th>
+    <th>Path</th>
+    <th>Parameters</th>
+</tr>
+</thead>
+<tbody>
+@for(rm <- methods) {
+<tr>
+    <td>@rm.name</td>
+    <td>@rm.path</td>
+    <td>@rm.parameters</td>
+</tr>
+}
+</tbody>
+
+}

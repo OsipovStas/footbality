@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat
 import models.RawInsertResult
 import scala.Some
 import models.RawTeam
+import play.api.Logger
 
 object Application extends Controller  {
 
@@ -29,6 +30,17 @@ object Application extends Controller  {
   def matches = matchesResponse(getAllMatches)
 
   def history = historyResponse(getHistory)
+
+  def options = Action {
+    r =>
+      acceptedContent(r) match {
+        case "text/plain" => Ok(Options.methods.toString()).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
+        case "text/xml" => Ok(JAXBWrappers.raw2XMLString(RawList(Options.methods))).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
+        case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(RawList(Options.methods))).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
+        case _ => Ok(views.html.methods(Options.methods))
+      }
+  }
+
 
   def matchesResponse(matches: List[RawMatch]) = Action { r =>
     acceptedContent(r) match {
@@ -108,6 +120,7 @@ object Application extends Controller  {
 
 
   def addMatch() = Action { r =>
+    Logger.info(r.contentType.toString)
     parseMatchBody(r) match {
       case Some(rm) => createMatch(rm)
       case _ => NotAcceptable
@@ -135,6 +148,18 @@ object Application extends Controller  {
 
   def createTask(rt: RawTask): Option[RawInsertResult] = DB.withTransaction { implicit c: Connection =>
     Task.insert(rt).map(RawInsertResult)
+  }
+
+
+  object Options {
+    val methods = List(
+      RawMethod("GET", "/matches", null),
+      RawMethod("GET", "/history", null),
+      RawMethod("GET", "/task/", "taskId"),
+      RawMethod("GET", "/teams", null),
+      RawMethod("PUT", "/match/", "match"),
+      RawMethod("PUT", "/task/", "task")
+    )
   }
 
 }

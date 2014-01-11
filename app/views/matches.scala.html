@@ -1,4 +1,4 @@
-@(teams: List[RawMatch])(implicit lang: Lang)
+@(matches: List[RawMatch])(implicit lang: Lang)
 
 @main("Matches") {
     <thead>
@@ -10,9 +10,9 @@
     </tr>
     </thead>
     <tbody>
-        @for(rm <- teams) {
-        <tr>
-            <td>@rm.home</td>
+    @for(rm <- matches) {
+    <tr>
+    <td>@rm.home</td>
             <td>@rm.away</td>
             <td>@rm.hs - @rm.as</td>
             <td>@rm.played</td>

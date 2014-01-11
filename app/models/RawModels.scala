@@ -56,6 +56,13 @@ class RawList[T] {
 
 }
 
+@XmlRootElement(name = "method")
+@XmlAccessorType(XmlAccessType.FIELD)
+case class RawMethod(name: String, path: String, parameters: String) {
+  private def this() = this("", "", "")
+}
+
+
 object RawMatch {
   private val contextXML = JAXBContext.newInstance(classOf[RawMatch])
   private val cfg: JSONConfiguration = JSONConfiguration.natural().rootUnwrapping(false).build()
@@ -142,9 +149,11 @@ object JAXBWrappers {
     classOf[RawMatch],
     classOf[RawList[RawMatch]],
     classOf[RawList[RawTeam]],
+    classOf[RawList[RawMethod]],
     classOf[RawTeam],
     classOf[RawTask],
-    classOf[RawInsertResult])
+    classOf[RawInsertResult],
+    classOf[RawMethod])
 
 
   private val contextXML = JAXBContext.newInstance(seq:_*)
@@ -175,14 +184,6 @@ object JAXBWrappers {
     writer.toString
   }
 
-  def XMLString2Option(xml: String) = {
-    try {
-      Some(unmarshaller.unmarshal(new StringReader(xml)))
-    }
-    catch {
-      case ex: Throwable => None
-    }
-  }
 
 
 }
