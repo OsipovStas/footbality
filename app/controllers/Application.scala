@@ -37,7 +37,8 @@ object Application extends Controller  {
         case "text/plain" => Ok(Options.methods.toString()).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
         case "text/xml" => Ok(JAXBWrappers.raw2XMLString(RawList(Options.methods))).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
         case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(RawList(Options.methods))).withHeaders(ALLOW -> "GET, PUT, OPTIONS")
-        case _ => Ok(views.html.methods(Options.methods))
+        case "text/html" => Ok(views.html.methods(Options.methods))
+        case _ => MethodNotAllowed.withHeaders(ALLOW -> "GET, PUT, OPTIONS")
       }
   }
 
@@ -47,7 +48,8 @@ object Application extends Controller  {
       case "text/plain" => Ok(matches.toString())
       case "text/xml" => Ok(JAXBWrappers.raw2XMLString(RawList(matches)))
       case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(RawList(matches)))
-      case _ => Ok(views.html.matches(matches))
+      case "text/html" => Ok(views.html.matches(matches))
+      case _ => MethodNotAllowed
     }
   }  
   
@@ -56,7 +58,8 @@ object Application extends Controller  {
       case "text/plain" => Ok(tasks.toString())
       case "text/xml" => Ok(JAXBWrappers.raw2XMLString(RawList(tasks)))
       case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(RawList(tasks)))
-      case _ => Ok(views.html.tasks(tasks.map(RawTask.RawTask2Task)))
+      case "text/html" => Ok(views.html.tasks(tasks.map(RawTask.RawTask2Task)))
+      case _ => MethodNotAllowed
     }
   }
 
@@ -74,7 +77,8 @@ object Application extends Controller  {
       case "text/plain" => Ok(teams.toString())
       case "text/xml" => Ok(JAXBWrappers.raw2XMLString(RawList(teams)))
       case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(RawList(teams)))
-      case _ => Ok(views.html.teams(teams))
+      case "text/html" => Ok(views.html.teams(teams))
+      case _ => MethodNotAllowed
     }
   }
   
@@ -83,7 +87,8 @@ object Application extends Controller  {
       case "text/plain" => Ok(insertResult.toString)
       case "text/xml" => Ok(JAXBWrappers.raw2XMLString(insertResult))
       case "text/javascript" => Ok(JAXBWrappers.raw2JSONString(insertResult))
-      case _ => Ok(insertResult.toString)
+      case "text/html" => Ok(insertResult.toString)
+      case _ => MethodNotAllowed
     }
   }
 
